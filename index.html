@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 GGEZ — Good Game Easy</title>
+  <style>
+    /* ===== RESET Y VARIABLES ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --fondo-principal: #0a0a0a;
+      --fondo-secundario: #111111;
+      --fondo-terciario: #1a1a1a;
+      --texto: #ffffff;
+      --morado-neon: #b366ff;
+      --verde-neon: #00ff88;
+      --radio-borde: 8px;
+      --transicion: 0.3s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--fondo-principal);
+      color: var(--texto);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Cuadrícula tech de fondo */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(179, 102, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(179, 102, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ===== UTILIDADES ===== */
+    .contenedor {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .seccion {
+      padding: 5rem 0;
+    }
+
+    .titulo-seccion {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--morado-neon);
+      text-align: center;
+      margin-bottom: 3rem;
+      text-shadow: 0 0 20px rgba(179, 102, 255, 0.4);
+    }
+
+    .btn-glow {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      border: 2px solid var(--verde-neon);
+      color: var(--verde-neon);
+      border-radius: var(--radio-borde);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transicion);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+    }
+
+    .btn-glow:hover {
+      background: var(--verde-neon);
+      color: var(--fondo-principal);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1rem 0;
+      transition: var(--transicion);
+      background: transparent;
+    }
+
+    .navbar.scrolled {
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--morado-neon);
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px rgba(179, 102, 255, 0.6);
+      transition: var(--transicion);
+    }
+
+    .logo:hover {
+      text-shadow: 0 0 25px rgba(179, 102, 255, 0.9);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: var(--transicion);
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--verde-neon);
+      transition: var(--transicion);
+    }
+
+    .nav-menu a:hover {
+      color: var(--verde-neon);
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    /* Hamburguesa */
+    .hamburguesa {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .hamburguesa span {
+      display: block;
+      width: 28px;
+      height: 3px;
+      background: var(--verde-neon);
+      border-radius: 2px;
+      transition: var(--transicion);
+    }
+
+    .hamburguesa.activo span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 6px);
+    }
+
+    .hamburguesa.activo span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburguesa.activo span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    /* Partículas CSS */
+    .particulas {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particula {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--verde-neon);
+      border-radius: 50%;
+      opacity: 0;
+      animation: flotar linear infinite;
+      box-shadow: 0 0 6px var(--verde-neon);
+    }
+
+    .particula:nth-child(odd) {
+      background: var(--morado-neon);
+      box-shadow: 0 0 6px var(--morado-neon);
+    }
+
+    @keyframes flotar {
+      0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    .hero-contenido {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-titulo {
+      font-size: clamp(4rem, 12vw, 7rem);
+      font-weight: 900;
+      color: var(--morado-neon);
+      letter-spacing: 8px;
+      text-shadow: 0 0 40px rgba(179, 102, 255, 0.5);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitulo {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--verde-neon);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-parrafo {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 2.5rem;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== SERVICIOS ===== */
+    .servicios {
+      background: var(--fondo-secundario);
+    }
+
+    .servicios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .servicio-card {
+      background: var(--fondo-terciario);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: var(--radio-borde);
+      padding: 2rem;
+      transition: var(--transicion);
+    }
+
+    .servicio-card:hover {
+      border-color: var(--verde-neon);
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .servicio-icono {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .servicio-card h3 {
+      font-size: 1.5rem;
+      color: var(--morado-neon);
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+    }
+
+    .servicio-card ul {
+      margin-bottom: 1.5rem;
+    }
+
+    .servicio-card li {
+      padding: 0.4rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .servicio-card li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--verde-neon);
+    }
+
+    .modo-item {
+      margin: 0.5rem 0;
+      padding-left: 0 !important;
+    }
+
+    .modo-item::before {
+      display: none !important;
+    }
+
+    .servicio-card .btn-glow {
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ===== TRABAJOS ===== */
+    .trabajos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .trabajo-card {
+      background: var(--fondo-secundario);
+      border: 1px solid rgba(179, 102, 255, 0.2);
+      border-radius: var(--radio-borde);
+      overflow: hidden;
+      transition: var(--transicion);
+    }
+
+    .trabajo-card:hover {
+      border-color: var(--morado-neon);
+      box-shadow: 0 0 25px rgba(179, 102, 255, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .trabajo-img {
+      width: 100%;
+      height: 200px;
+      background: var(--fondo-terciario);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(179, 102, 255, 0.15);
+    }
+
+    .trabajo-info {
+      padding: 1.2rem;
+    }
+
+    .trabajo-info h3 {
+      color: var(--verde-neon);
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .trabajo-info p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* ===== TESTIMONIOS ===== */
+    .testimonios {
+      background: var(--fondo-secundario);
+    }
+
+    .testimonios-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .formulario-testimonio {
+      background: var(--fondo-terciario);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: var(--radio-borde);
+      padding: 2rem;
+    }
+
+    .formulario-testimonio h3 {
+      color: var(--morado-neon);
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+
+    .campo-grupo {
+      margin-bottom: 1.2rem;
+    }
+
+    .campo-grupo label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .campo-grupo input,
+    .campo-grupo textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--fondo-principal);
+      border: 1px solid rgba(179, 102, 255, 0.3);
+      border-radius: var(--radio-borde);
+      color: var(--texto);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transicion);
+    }
+
+    .campo-grupo input:focus,
+    .campo-grupo textarea:focus {
+      outline: none;
+      border-color: var(--verde-neon);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+    }
+
+    .campo-grupo textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .estrellas-input {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .estrella-btn {
+      background: var(--fondo-principal);
+      border: 1px solid rgba(179, 102, 255, 0.3);
+      border-radius: var(--radio-borde);
+      padding: 0.5rem 0.75rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transicion);
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .estrella-btn:hover,
+    .estrella-btn.seleccionada {
+      border-color: var(--verde-neon);
+      color: #ffd700;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+
+    .mensaje-exito {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid var(--verde-neon);
+      border-radius: var(--radio-borde);
+      color: var(--verde-neon);
+      text-align: center;
+    }
+
+    .mensaje-exito.visible {
+      display: block;
+    }
+
+    .mensaje-error {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(255, 80, 80, 0.1);
+      border: 1px solid #ff5050;
+      border-radius: var(--radio-borde);
+      color: #ff5050;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .mensaje-error.visible {
+      display: block;
+    }
+
+    .testimonios-lista h3 {
+      color: var(--morado-neon);
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+
+    .testimonios-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .testimonios-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .testimonios-grid::-webkit-scrollbar-track {
+      background: var(--fondo-principal);
+      border-radius: 3px;
+    }
+
+    .testimonios-grid::-webkit-scrollbar-thumb {
+      background: var(--morado-neon);
+      border-radius: 3px;
+    }
+
+    .testimonio-card {
+      background: var(--fondo-terciario);
+      border: 1px solid rgba(179, 102, 255, 0.2);
+      border-radius: var(--radio-borde);
+      padding: 1.5rem;
+      transition: var(--transicion);
+    }
+
+    .testimonio-card:hover {
+      border-color: var(--morado-neon);
+      box-shadow: 0 0 15px rgba(179, 102, 255, 0.15);
+    }
+
+    .testimonio-texto {
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+    }
+
+    .testimonio-nombre {
+      font-weight: 600;
+      color: var(--verde-neon);
+      margin-bottom: 0.3rem;
+    }
+
+    .testimonio-estrellas {
+      color: #ffd700;
+      font-size: 1rem;
+    }
+
+    .sin-testimonios {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      padding: 2rem;
+      font-style: italic;
+    }
+
+    /* ===== CÓMO TRABAJO ===== */
+    .pasos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .paso-card {
+      background: var(--fondo-secundario);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: var(--radio-borde);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: var(--transicion);
+      position: relative;
+    }
+
+    .paso-card:hover {
+      border-color: var(--verde-neon);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .paso-numero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--morado-neon);
+      color: var(--fondo-principal);
+      font-weight: 800;
+      font-size: 1.3rem;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 15px rgba(179, 102, 255, 0.4);
+    }
+
+    .paso-card h3 {
+      color: var(--verde-neon);
+      margin-bottom: 0.6rem;
+      font-size: 1.15rem;
+    }
+
+    .paso-card p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .modalidades {
+      background: var(--fondo-secundario);
+      border: 1px solid rgba(179, 102, 255, 0.2);
+      border-radius: var(--radio-borde);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .modalidades h3 {
+      color: var(--morado-neon);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .modalidad-item {
+      padding: 0.6rem 0;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* ===== CONTACTO ===== */
+    .contacto {
+      background: var(--fondo-secundario);
+    }
+
+    .contacto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .contacto-item {
+      background: var(--fondo-terciario);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: var(--radio-borde);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: var(--transicion);
+    }
+
+    .contacto-item:hover {
+      border-color: var(--verde-neon);
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .contacto-icono {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .contacto-item h3 {
+      color: var(--morado-neon);
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .contacto-item p,
+    .contacto-item a {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1rem;
+      transition: var(--transicion);
+    }
+
+    .contacto-item a:hover {
+      color: var(--verde-neon);
+    }
+
+    /* WhatsApp flotante */
+    .whatsapp-flotante {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      z-index: 999;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      transition: var(--transicion);
+      animation: pulso 2s infinite;
+    }
+
+    .whatsapp-flotante:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 35px rgba(0, 255, 136, 0.8);
+    }
+
+    @keyframes pulso {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+      50% { box-shadow: 0 0 35px rgba(0, 255, 136, 0.8); }
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #111111;
+      padding: 2rem 0;
+      text-align: center;
+      border-top: 1px solid rgba(179, 102, 255, 0.15);
+    }
+
+    .footer-texto {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-iconos {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-iconos a {
+      font-size: 1.8rem;
+      transition: var(--transicion);
+    }
+
+    .footer-iconos a:hover {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 8px var(--verde-neon));
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hamburguesa {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        max-width: 300px;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.97);
+        backdrop-filter: blur(15px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        transition: var(--transicion);
+        border-left: 1px solid rgba(0, 255, 136, 0.2);
+      }
+
+      .nav-menu.activo {
+        right: 0;
+      }
+
+      .nav-menu a {
+        font-size: 1.2rem;
+      }
+
+      .testimonios-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .servicios-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-titulo {
+        letter-spacing: 4px;
+      }
+
+      .whatsapp-flotante {
+        width: 55px;
+        height: 55px;
+        font-size: 1.7rem;
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SECCIÓN 1: NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="contenedor navbar-inner">
+      <a href="#inicio" class="logo">GGEZ</a>
+      <button class="hamburguesa" id="hamburguesa" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#trabajos">Trabajos</a></li>
+          <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#como-trabajo">Cómo Trabajo</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SECCIÓN 2: HERO -->
+  <section class="hero" id="inicio">
+    <div class="particulas" id="particulas"></div>
+    <div class="hero-contenido contenedor">
+      <h1 class="hero-titulo">GGEZ</h1>
+      <p class="hero-subtitulo">Good Game Easy — Soluciones informáticas rápidas y sin complicaciones.</p>
+      <p class="hero-parrafo">Ingeniero en Sistemas Computacionales. Tu setup, nuestro game. Desde mantenimiento hasta desarrollo web, te ayudo a ganar.</p>
+      <a href="#servicios" class="btn-glow">Ver Servicios</a>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: SERVICIOS -->
+  <section class="seccion servicios" id="servicios">
+    <div class="contenedor">
+      <h2 class="titulo-seccion">Servicios</h2>
+      <div class="servicios-grid">
+
+        <!-- Hardware -->
+        <div class="servicio-card">
+          <div class="servicio-icono">🔧</div>
+          <h3>HARDWARE</h3>
+          <ul>
+            <li>Mantenimiento preventivo (limpieza interna, cambio de pasta térmica, chequeo general)</li>
+            <li>Reparación de PC y laptops</li>
+            <li>Ensamble de equipos personalizados</li>
+            <li>Diagnóstico de fallas</li>
+          </ul>
+          <a href="#contacto" class="btn-glow">Cotización Gratis</a>
+        </div>
+
+        <!-- Software -->
+        <div class="servicio-card">
+          <div class="servicio-icono">💻</div>
+          <h3>SOFTWARE</h3>
+          <ul>
+            <li>Instalación de sistemas operativos optimizados y personalizados:</li>
+            <li class="modo-item">🎮 <strong>Modo Gaming:</strong> máxima prioridad a juegos, procesos innecesarios desactivados, drivers al día.</li>
+            <li class="modo-item">💼 <strong>Modo Productividad:</strong> ideal para oficina, estudio o uso diario. Rápido, estable y eficiente.</li>
+            <li class="modo-item">🏢 <strong>Modo Empresarial:</strong> enfocado en seguridad, estabilidad y rendimiento para entornos de trabajo.</li>
+            <li>Optimización de Windows (limpieza profunda, mejora de rendimiento, agilidad del sistema)</li>
+            <li>Eliminación de virus y malware</li>
+            <li>Recuperación de datos</li>
+            <li>Reparación de software / diagnóstico de fallas de sistema</li>
+          </ul>
+          <a href="#contacto" class="btn-glow">Cotización Gratis</a>
+        </div>
+
+        <!-- Desarrollo Web -->
+        <div class="servicio-card">
+          <div class="servicio-icono">🌐</div>
+          <h3>DESARROLLO WEB</h3>
+          <ul>
+            <li>Creación de páginas web profesionales</li>
+            <li>Landing pages</li>
+            <li>Portafolios personales</li>
+            <li>Sitios informativos para negocios</li>
+          </ul>
+          <a href="#contacto" class="btn-glow">Cotización Gratis</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: TRABAJOS REALIZADOS -->
+  <section class="seccion" id="trabajos">
+    <div class="contenedor">
+      <h2 class="titulo-seccion">Trabajos Realizados</h2>
+      <div class="trabajos-grid">
+
+        <div class="trabajo-card">
+          <div class="trabajo-img">
+            <!-- Reemplazar con: <img src="img/trabajo1.jpg" alt="Ensamble PC Gamer"> -->
+            Imagen — Ensamble PC Gamer
+          </div>
+          <div class="trabajo-info">
+            <h3>Ensamble PC Gamer</h3>
+            <p>Ryzen 7 + RTX 4060 + gabinete vidrio templado.</p>
+          </div>
+        </div>
+
+        <div class="trabajo-card">
+          <div class="trabajo-img">
+            <!-- Reemplazar con: <img src="img/trabajo2.jpg" alt="Optimización Windows"> -->
+            Imagen — Optimización Windows
+          </div>
+          <div class="trabajo-info">
+            <h3>Optimización Windows</h3>
+            <p>Laptop lenta a sistema ágil sin formatear.</p>
+          </div>
+        </div>
+
+        <div class="trabajo-card">
+          <div class="trabajo-img">
+            <!-- Reemplazar con: <img src="img/trabajo3.jpg" alt="Limpieza Profunda"> -->
+            Imagen — Limpieza Profunda
+          </div>
+          <div class="trabajo-info">
+            <h3>Limpieza Profunda</h3>
+            <p>Mantenimiento completo con cambio de pasta térmica.</p>
+          </div>
+        </div>
+
+        <div class="trabajo-card">
+          <div class="trabajo-img">
+            <!-- Reemplazar con: <img src="img/trabajo4.jpg" alt="Página Web"> -->
+            Imagen — Página Web
+          </div>
+          <div class="trabajo-info">
+            <h3>Página Web</h3>
+            <p>Landing page para emprendimiento local.</p>
+          </div>
+        </div>
+
+        <div class="trabajo-card">
+          <div class="trabajo-img">
+            <!-- Reemplazar con: <img src="img/trabajo5.jpg" alt="Rescate de Datos"> -->
+            Imagen — Rescate de Datos
+          </div>
+          <div class="trabajo-info">
+            <h3>Rescate de Datos</h3>
+            <p>Recuperación de archivos de disco duro dañado.</p>
+          </div>
+        </div>
+
+        <div class="trabajo-card">
+          <div class="trabajo-img">
+            <!-- Reemplazar con: <img src="img/trabajo6.jpg" alt="Windows Gaming Optimizado"> -->
+            Imagen — Windows Gaming Optimizado
+          </div>
+          <div class="trabajo-info">
+            <h3>Windows Gaming Optimizado</h3>
+            <p>SO configurado para máximo rendimiento en juegos.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5: TESTIMONIOS -->
+  <section class="seccion testimonios" id="testimonios">
+    <div class="contenedor">
+      <h2 class="titulo-seccion">Lo Que Dicen Mis Clientes</h2>
+      <div class="testimonios-layout">
+
+        <!-- Parte A: Formulario -->
+        <div class="formulario-testimonio">
+          <h3>Deja tu Testimonio</h3>
+          <form id="formTestimonio">
+            <div class="campo-grupo">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="campo-grupo">
+              <label for="testimonio">Testimonio</label>
+              <textarea id="testimonio" name="testimonio" placeholder="Cuéntanos tu experiencia..." required></textarea>
+            </div>
+            <div class="campo-grupo">
+              <label>Calificación</label>
+              <div class="estrellas-input" id="estrellasInput">
+                <button type="button" class="estrella-btn" data-valor="1">⭐</button>
+                <button type="button" class="estrella-btn" data-valor="2">⭐</button>
+                <button type="button" class="estrella-btn" data-valor="3">⭐</button>
+                <button type="button" class="estrella-btn" data-valor="4">⭐</button>
+                <button type="button" class="estrella-btn" data-valor="5">⭐</button>
+              </div>
+              <input type="hidden" id="estrellasValor" value="">
+            </div>
+            <button type="submit" class="btn-glow" style="width:100%">Publicar Testimonio</button>
+            <div class="mensaje-exito" id="mensajeExito">¡Gracias! Tu testimonio se publicará en breve.</div>
+            <div class="mensaje-error" id="mensajeError"></div>
+          </form>
+        </div>
+
+        <!-- Parte B: Testimonios publicados -->
+        <div class="testimonios-lista">
+          <h3>Testimonios Publicados</h3>
+          <div class="testimonios-grid" id="testimoniosGrid">
+            <p class="sin-testimonios" id="sinTestimonios">Sé el primero en dejar tu testimonio.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 6: CÓMO TRABAJO -->
+  <section class="seccion" id="como-trabajo">
+    <div class="contenedor">
+      <h2 class="titulo-seccion">¿Cómo Trabajo?</h2>
+      <div class="pasos-grid">
+        <div class="paso-card">
+          <div class="paso-numero">1</div>
+          <h3>Contáctame</h3>
+          <p>Escríbeme por WhatsApp o Gmail, cuéntame tu problema o proyecto.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">2</div>
+          <h3>Diagnóstico y Cotización</h3>
+          <p>Reviso tu caso. Cotización 100% gratis y sin compromiso.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">3</div>
+          <h3>Manos a la Obra</h3>
+          <p>Reparo, ensamblo, optimizo o desarrollo con seguimiento.</p>
+        </div>
+        <div class="paso-card">
+          <div class="paso-numero">4</div>
+          <h3>Entrega y Garantía</h3>
+          <p>Entrega final y seguimiento post-servicio.</p>
+        </div>
+      </div>
+      <div class="modalidades">
+        <h3>Modalidades de Servicio</h3>
+        <p class="modalidad-item">🏠 <strong>Presencial:</strong> Área Metropolitana de Monterrey (Apodaca y alrededores)</p>
+        <p class="modalidad-item">🌐 <strong>Remoto:</strong> Todo México y otros países (software y desarrollo web)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 7: CONTACTO -->
+  <section class="seccion contacto" id="contacto">
+    <div class="contenedor">
+      <h2 class="titulo-seccion">Contacto</h2>
+      <div class="contacto-grid">
+        <div class="contacto-item">
+          <div class="contacto-icono">📱</div>
+          <h3>WhatsApp</h3>
+          <a href="https://wa.me/528140051596" target="_blank" rel="noopener">+52 81 4005 1596</a>
+        </div>
+        <div class="contacto-item">
+          <div class="contacto-icono">✉️</div>
+          <h3>Gmail</h3>
+          <a href="mailto:ggez.servicios@gmail.com">ggez.servicios@gmail.com</a>
+        </div>
+        <div class="contacto-item">
+          <div class="contacto-icono">📍</div>
+          <h3>Ubicación</h3>
+          <p>Apodaca, Nuevo León, México<br>(Área Metropolitana de Monterrey)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp flotante -->
+  <a href="https://wa.me/528140051596" class="whatsapp-flotante" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">💬</a>
+
+  <!-- SECCIÓN 8: FOOTER -->
+  <footer class="footer">
+    <div class="contenedor">
+      <p class="footer-texto">GGEZ © 2025 — Good Game Easy. Todos los derechos reservados.</p>
+      <div class="footer-iconos">
+        <a href="https://wa.me/528140051596" target="_blank" rel="noopener" aria-label="WhatsApp">📱</a>
+        <a href="mailto:ggez.servicios@gmail.com" aria-label="Gmail">✉️</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ===== CONFIGURACIÓN DE FIREBASE =====
+    // Reemplaza los placeholders con tus credenciales de Firebase
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_AUTH_DOMAIN",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_STORAGE_BUCKET",
+      messagingSenderId: "TU_MESSAGING_SENDER_ID",
+      appId: "TU_APP_ID"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ===== PARTÍCULAS CSS (generación dinámica) =====
+    (function crearParticulas() {
+      const contenedor = document.getElementById('particulas');
+      const cantidad = 30;
+
+      for (let i = 0; i < cantidad; i++) {
+        const particula = document.createElement('div');
+        particula.classList.add('particula');
+        particula.style.left = Math.random() * 100 + '%';
+        particula.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        particula.style.animationDelay = (Math.random() * 10) + 's';
+        particula.style.width = (Math.random() * 4 + 2) + 'px';
+        particula.style.height = particula.style.width;
+        contenedor.appendChild(particula);
+      }
+    })();
+
+    // ===== NAVBAR SCROLL Y BLUR =====
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // ===== MENÚ HAMBURGUESA =====
+    const hamburguesa = document.getElementById('hamburguesa');
+    const navMenu = document.getElementById('navMenu');
+
+    hamburguesa.addEventListener('click', function () {
+      hamburguesa.classList.toggle('activo');
+      navMenu.classList.toggle('activo');
+    });
+
+    // Cerrar menú al hacer clic en un enlace
+    navMenu.querySelectorAll('a').forEach(function (enlace) {
+      enlace.addEventListener('click', function () {
+        hamburguesa.classList.remove('activo');
+        navMenu.classList.remove('activo');
+      });
+    });
+
+    // ===== ESTRELLAS DEL FORMULARIO =====
+    const estrellasBtns = document.querySelectorAll('.estrella-btn');
+    const estrellasValor = document.getElementById('estrellasValor');
+    let estrellasSeleccionadas = 0;
+
+    estrellasBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        estrellasSeleccionadas = parseInt(btn.dataset.valor);
+        estrellasValor.value = estrellasSeleccionadas;
+
+        estrellasBtns.forEach(function (b, index) {
+          if (index < estrellasSeleccionadas) {
+            b.classList.add('seleccionada');
+          } else {
+            b.classList.remove('seleccionada');
+          }
+        });
+      });
+    });
+
+    // ===== ENVIAR TESTIMONIO A FIRESTORE =====
+    const formTestimonio = document.getElementById('formTestimonio');
+    const mensajeExito = document.getElementById('mensajeExito');
+    const mensajeError = document.getElementById('mensajeError');
+
+    formTestimonio.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      mensajeExito.classList.remove('visible');
+      mensajeError.classList.remove('visible');
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const testimonio = document.getElementById('testimonio').value.trim();
+      const estrellas = parseInt(estrellasValor.value);
+
+      // Validación de campos obligatorios
+      if (!nombre || !testimonio || !estrellas || estrellas < 1 || estrellas > 5) {
+        mensajeError.textContent = 'Por favor completa todos los campos, incluyendo la calificación.';
+        mensajeError.classList.add('visible');
+        return;
+      }
+
+      // Guardar en Firestore
+      db.collection('testimonios').add({
+        nombre: nombre,
+        testimonio: testimonio,
+        estrellas: estrellas,
+        fecha: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(function () {
+        mensajeExito.classList.add('visible');
+        formTestimonio.reset();
+        estrellasSeleccionadas = 0;
+        estrellasBtns.forEach(function (b) {
+          b.classList.remove('seleccionada');
+        });
+        estrellasValor.value = '';
+      })
+      .catch(function (error) {
+        mensajeError.textContent = 'Error al publicar. Verifica tu configuración de Firebase.';
+        mensajeError.classList.add('visible');
+        console.error('Error Firestore:', error);
+      });
+    });
+
+    // ===== CARGAR TESTIMONIOS EN TIEMPO REAL =====
+    const testimoniosGrid = document.getElementById('testimoniosGrid');
+    const sinTestimonios = document.getElementById('sinTestimonios');
+
+    db.collection('testimonios')
+      .orderBy('fecha', 'desc')
+      .onSnapshot(function (snapshot) {
+        // Limpiar tarjetas anteriores (excepto mensaje vacío)
+        testimoniosGrid.querySelectorAll('.testimonio-card').forEach(function (card) {
+          card.remove();
+        });
+
+        if (snapshot.empty) {
+          sinTestimonios.style.display = 'block';
+          return;
+        }
+
+        sinTestimonios.style.display = 'none';
+
+        snapshot.forEach(function (doc) {
+          const data = doc.data();
+          const estrellasHtml = '⭐'.repeat(data.estrellas);
+
+          const card = document.createElement('div');
+          card.classList.add('testimonio-card');
+          card.innerHTML =
+            '<p class="testimonio-texto">"' + escapeHtml(data.testimonio) + '"</p>' +
+            '<p class="testimonio-nombre">— ' + escapeHtml(data.nombre) + '</p>' +
+            '<p class="testimonio-estrellas">' + estrellasHtml + '</p>';
+
+          testimoniosGrid.appendChild(card);
+        });
+      }, function (error) {
+        console.error('Error al cargar testimonios:', error);
+      });
+
+    // Escapar HTML para prevenir XSS
+    function escapeHtml(texto) {
+      const div = document.createElement('div');
+      div.textContent = texto;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
