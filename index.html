@@ -35,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* Cuadrícula tech de fondo */
     body::before {
       content: '';
       position: fixed;
@@ -62,7 +61,6 @@
       display: block;
     }
 
-    /* ===== UTILIDADES ===== */
     .contenedor {
       max-width: 1200px;
       margin: 0 auto;
@@ -105,7 +103,6 @@
       transform: translateY(-2px);
     }
 
-    /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
       top: 0;
@@ -176,7 +173,6 @@
       width: 100%;
     }
 
-    /* Hamburguesa */
     .hamburguesa {
       display: none;
       flex-direction: column;
@@ -209,7 +205,6 @@
       transform: rotate(-45deg) translate(5px, -6px);
     }
 
-    /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -221,7 +216,6 @@
       padding-top: 80px;
     }
 
-    /* Partículas CSS */
     .particulas {
       position: absolute;
       inset: 0;
@@ -293,7 +287,6 @@
       margin-right: auto;
     }
 
-    /* ===== SERVICIOS ===== */
     .servicios {
       background: var(--fondo-secundario);
     }
@@ -363,7 +356,6 @@
       text-align: center;
     }
 
-    /* ===== TRABAJOS ===== */
     .trabajos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -411,7 +403,6 @@
       color: rgba(255, 255, 255, 0.75);
     }
 
-    /* ===== TESTIMONIOS ===== */
     .testimonios {
       background: var(--fondo-secundario);
     }
@@ -593,7 +584,6 @@
       font-style: italic;
     }
 
-    /* ===== CÓMO TRABAJO ===== */
     .pasos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -663,7 +653,6 @@
       color: rgba(255, 255, 255, 0.9);
     }
 
-    /* ===== CONTACTO ===== */
     .contacto {
       background: var(--fondo-secundario);
     }
@@ -711,7 +700,6 @@
       color: var(--verde-neon);
     }
 
-    /* WhatsApp flotante */
     .whatsapp-flotante {
       position: fixed;
       bottom: 25px;
@@ -740,7 +728,6 @@
       50% { box-shadow: 0 0 35px rgba(0, 255, 136, 0.8); }
     }
 
-    /* ===== FOOTER ===== */
     .footer {
       background: #111111;
       padding: 2rem 0;
@@ -770,7 +757,6 @@
       filter: drop-shadow(0 0 8px var(--verde-neon));
     }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .hamburguesa {
         display: flex;
@@ -825,7 +811,6 @@
 </head>
 <body>
 
-  <!-- SECCIÓN 1: NAVBAR -->
   <header class="navbar" id="navbar">
     <div class="contenedor navbar-inner">
       <a href="#inicio" class="logo">GGEZ</a>
@@ -847,7 +832,6 @@
     </div>
   </header>
 
-  <!-- SECCIÓN 2: HERO -->
   <section class="hero" id="inicio">
     <div class="particulas" id="particulas"></div>
     <div class="hero-contenido contenedor">
@@ -858,13 +842,11 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 3: SERVICIOS -->
   <section class="seccion servicios" id="servicios">
     <div class="contenedor">
       <h2 class="titulo-seccion">Servicios</h2>
       <div class="servicios-grid">
 
-        <!-- Hardware -->
         <div class="servicio-card">
           <div class="servicio-icono">🔧</div>
           <h3>HARDWARE</h3>
@@ -877,7 +859,6 @@
           <a href="#contacto" class="btn-glow">Cotización Gratis</a>
         </div>
 
-        <!-- Software -->
         <div class="servicio-card">
           <div class="servicio-icono">💻</div>
           <h3>SOFTWARE</h3>
@@ -894,7 +875,6 @@
           <a href="#contacto" class="btn-glow">Cotización Gratis</a>
         </div>
 
-        <!-- Desarrollo Web -->
         <div class="servicio-card">
           <div class="servicio-icono">🌐</div>
           <h3>DESARROLLO WEB</h3>
@@ -911,154 +891,51 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 4: TRABAJOS REALIZADOS -->
   <section class="seccion" id="trabajos">
     <div class="contenedor">
       <h2 class="titulo-seccion">Trabajos Realizados</h2>
       <div class="trabajos-grid">
-
-        <div class="trabajo-card">
-          <div class="trabajo-img">
-            <!-- Reemplazar con: <img src="img/trabajo1.jpg" alt="Ensamble PC Gamer"> -->
-            Imagen — Ensamble PC Gamer
-          </div>
-          <div class="trabajo-info">
-            <h3>Ensamble PC Gamer</h3>
-            <p>Ryzen 7 + RTX 4060 + gabinete vidrio templado.</p>
-          </div>
-        </div>
-
-        <div class="trabajo-card">
-          <div class="trabajo-img">
-            <!-- Reemplazar con: <img src="img/trabajo2.jpg" alt="Optimización Windows"> -->
-            Imagen — Optimización Windows
-          </div>
-          <div class="trabajo-info">
-            <h3>Optimización Windows</h3>
-            <p>Laptop lenta a sistema ágil sin formatear.</p>
-          </div>
-        </div>
-
-        <div class="trabajo-card">
-          <div class="trabajo-img">
-            <!-- Reemplazar con: <img src="img/trabajo3.jpg" alt="Limpieza Profunda"> -->
-            Imagen — Limpieza Profunda
-          </div>
-          <div class="trabajo-info">
-            <h3>Limpieza Profunda</h3>
-            <p>Mantenimiento completo con cambio de pasta térmica.</p>
-          </div>
-        </div>
-
-        <div class="trabajo-card">
-          <div class="trabajo-img">
-            <!-- Reemplazar con: <img src="img/trabajo4.jpg" alt="Página Web"> -->
-            Imagen — Página Web
-          </div>
-          <div class="trabajo-info">
-            <h3>Página Web</h3>
-            <p>Landing page para emprendimiento local.</p>
-          </div>
-        </div>
-
-        <div class="trabajo-card">
-          <div class="trabajo-img">
-            <!-- Reemplazar con: <img src="img/trabajo5.jpg" alt="Rescate de Datos"> -->
-            Imagen — Rescate de Datos
-          </div>
-          <div class="trabajo-info">
-            <h3>Rescate de Datos</h3>
-            <p>Recuperación de archivos de disco duro dañado.</p>
-          </div>
-        </div>
-
-        <div class="trabajo-card">
-          <div class="trabajo-img">
-            <!-- Reemplazar con: <img src="img/trabajo6.jpg" alt="Windows Gaming Optimizado"> -->
-            Imagen — Windows Gaming Optimizado
-          </div>
-          <div class="trabajo-info">
-            <h3>Windows Gaming Optimizado</h3>
-            <p>SO configurado para máximo rendimiento en juegos.</p>
-          </div>
-        </div>
-
+        <div class="trabajo-card"><div class="trabajo-img">Imagen — Ensamble PC Gamer</div><div class="trabajo-info"><h3>Ensamble PC Gamer</h3><p>Ryzen 7 + RTX 4060 + gabinete vidrio templado.</p></div></div>
+        <div class="trabajo-card"><div class="trabajo-img">Imagen — Optimización Windows</div><div class="trabajo-info"><h3>Optimización Windows</h3><p>Laptop lenta a sistema ágil sin formatear.</p></div></div>
+        <div class="trabajo-card"><div class="trabajo-img">Imagen — Limpieza Profunda</div><div class="trabajo-info"><h3>Limpieza Profunda</h3><p>Mantenimiento completo con cambio de pasta térmica.</p></div></div>
+        <div class="trabajo-card"><div class="trabajo-img">Imagen — Página Web</div><div class="trabajo-info"><h3>Página Web</h3><p>Landing page para emprendimiento local.</p></div></div>
+        <div class="trabajo-card"><div class="trabajo-img">Imagen — Rescate de Datos</div><div class="trabajo-info"><h3>Rescate de Datos</h3><p>Recuperación de archivos de disco duro dañado.</p></div></div>
+        <div class="trabajo-card"><div class="trabajo-img">Imagen — Windows Gaming Optimizado</div><div class="trabajo-info"><h3>Windows Gaming Optimizado</h3><p>SO configurado para máximo rendimiento en juegos.</p></div></div>
       </div>
     </div>
   </section>
 
-  <!-- SECCIÓN 5: TESTIMONIOS -->
   <section class="seccion testimonios" id="testimonios">
     <div class="contenedor">
       <h2 class="titulo-seccion">Lo Que Dicen Mis Clientes</h2>
       <div class="testimonios-layout">
-
-        <!-- Parte A: Formulario -->
         <div class="formulario-testimonio">
           <h3>Deja tu Testimonio</h3>
           <form id="formTestimonio">
-            <div class="campo-grupo">
-              <label for="nombre">Nombre</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
-            </div>
-            <div class="campo-grupo">
-              <label for="testimonio">Testimonio</label>
-              <textarea id="testimonio" name="testimonio" placeholder="Cuéntanos tu experiencia..." required></textarea>
-            </div>
-            <div class="campo-grupo">
-              <label>Calificación</label>
-              <div class="estrellas-input" id="estrellasInput">
-                <button type="button" class="estrella-btn" data-valor="1">⭐</button>
-                <button type="button" class="estrella-btn" data-valor="2">⭐</button>
-                <button type="button" class="estrella-btn" data-valor="3">⭐</button>
-                <button type="button" class="estrella-btn" data-valor="4">⭐</button>
-                <button type="button" class="estrella-btn" data-valor="5">⭐</button>
-              </div>
-              <input type="hidden" id="estrellasValor" value="">
-            </div>
+            <div class="campo-grupo"><label for="nombre">Nombre</label><input type="text" id="nombre" placeholder="Tu nombre" required></div>
+            <div class="campo-grupo"><label for="testimonio">Testimonio</label><textarea id="testimonio" placeholder="Cuéntanos tu experiencia..." required></textarea></div>
+            <div class="campo-grupo"><label>Calificación</label><div class="estrellas-input" id="estrellasInput"><button type="button" class="estrella-btn" data-valor="1">⭐</button><button type="button" class="estrella-btn" data-valor="2">⭐</button><button type="button" class="estrella-btn" data-valor="3">⭐</button><button type="button" class="estrella-btn" data-valor="4">⭐</button><button type="button" class="estrella-btn" data-valor="5">⭐</button></div><input type="hidden" id="estrellasValor" value=""></div>
             <button type="submit" class="btn-glow" style="width:100%">Publicar Testimonio</button>
             <div class="mensaje-exito" id="mensajeExito">¡Gracias! Tu testimonio se publicará en breve.</div>
             <div class="mensaje-error" id="mensajeError"></div>
           </form>
         </div>
-
-        <!-- Parte B: Testimonios publicados -->
         <div class="testimonios-lista">
           <h3>Testimonios Publicados</h3>
-          <div class="testimonios-grid" id="testimoniosGrid">
-            <p class="sin-testimonios" id="sinTestimonios">Sé el primero en dejar tu testimonio.</p>
-          </div>
+          <div class="testimonios-grid" id="testimoniosGrid"><p class="sin-testimonios" id="sinTestimonios">Sé el primero en dejar tu testimonio.</p></div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- SECCIÓN 6: CÓMO TRABAJO -->
   <section class="seccion" id="como-trabajo">
     <div class="contenedor">
       <h2 class="titulo-seccion">¿Cómo Trabajo?</h2>
       <div class="pasos-grid">
-        <div class="paso-card">
-          <div class="paso-numero">1</div>
-          <h3>Contáctame</h3>
-          <p>Escríbeme por WhatsApp o Gmail, cuéntame tu problema o proyecto.</p>
-        </div>
-        <div class="paso-card">
-          <div class="paso-numero">2</div>
-          <h3>Diagnóstico y Cotización</h3>
-          <p>Reviso tu caso. Cotización 100% gratis y sin compromiso.</p>
-        </div>
-        <div class="paso-card">
-          <div class="paso-numero">3</div>
-          <h3>Manos a la Obra</h3>
-          <p>Reparo, ensamblo, optimizo o desarrollo con seguimiento.</p>
-        </div>
-        <div class="paso-card">
-          <div class="paso-numero">4</div>
-          <h3>Entrega y Garantía</h3>
-          <p>Entrega final y seguimiento post-servicio.</p>
-        </div>
+        <div class="paso-card"><div class="paso-numero">1</div><h3>Contáctame</h3><p>Escríbeme por WhatsApp o Gmail, cuéntame tu problema o proyecto.</p></div>
+        <div class="paso-card"><div class="paso-numero">2</div><h3>Diagnóstico y Cotización</h3><p>Reviso tu caso. Cotización 100% gratis y sin compromiso.</p></div>
+        <div class="paso-card"><div class="paso-numero">3</div><h3>Manos a la Obra</h3><p>Reparo, ensamblo, optimizo o desarrollo con seguimiento.</p></div>
+        <div class="paso-card"><div class="paso-numero">4</div><h3>Entrega y Garantía</h3><p>Entrega final y seguimiento post-servicio.</p></div>
       </div>
       <div class="modalidades">
         <h3>Modalidades de Servicio</h3>
@@ -1068,34 +945,19 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 7: CONTACTO -->
   <section class="seccion contacto" id="contacto">
     <div class="contenedor">
       <h2 class="titulo-seccion">Contacto</h2>
       <div class="contacto-grid">
-        <div class="contacto-item">
-          <div class="contacto-icono">📱</div>
-          <h3>WhatsApp</h3>
-          <a href="https://wa.me/528140051596" target="_blank" rel="noopener">+52 81 4005 1596</a>
-        </div>
-        <div class="contacto-item">
-          <div class="contacto-icono">✉️</div>
-          <h3>Gmail</h3>
-          <a href="mailto:ggez.servicios@gmail.com">ggez.servicios@gmail.com</a>
-        </div>
-        <div class="contacto-item">
-          <div class="contacto-icono">📍</div>
-          <h3>Ubicación</h3>
-          <p>Apodaca, Nuevo León, México<br>(Área Metropolitana de Monterrey)</p>
-        </div>
+        <div class="contacto-item"><div class="contacto-icono">📱</div><h3>WhatsApp</h3><a href="https://wa.me/528140051596" target="_blank" rel="noopener">+52 81 4005 1596</a></div>
+        <div class="contacto-item"><div class="contacto-icono">✉️</div><h3>Gmail</h3><a href="mailto:ggez.servicios@gmail.com">ggez.servicios@gmail.com</a></div>
+        <div class="contacto-item"><div class="contacto-icono">📍</div><h3>Ubicación</h3><p>Apodaca, Nuevo León, México<br>(Área Metropolitana de Monterrey)</p></div>
       </div>
     </div>
   </section>
 
-  <!-- WhatsApp flotante -->
   <a href="https://wa.me/528140051596" class="whatsapp-flotante" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">💬</a>
 
-  <!-- SECCIÓN 8: FOOTER -->
   <footer class="footer">
     <div class="contenedor">
       <p class="footer-texto">GGEZ © 2025 — Good Game Easy. Todos los derechos reservados.</p>
@@ -1106,65 +968,51 @@
     </div>
   </footer>
 
-  <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <script>
     // ===== CONFIGURACIÓN DE FIREBASE =====
-    // Reemplaza los placeholders con tus credenciales de Firebase
     const firebaseConfig = {
-    apiKey: "AIzaSyCo4bRcTLb1_-eXeOhdtXQEZ90sQmUZw90",
-    authDomain: "ggez-5302e.firebaseapp.com",
-    projectId: "ggez-5302e",
-    storageBucket: "ggez-5302e.firebasestorage.app",
-    messagingSenderId: "650058792708",
-    appId: "1:650058792708:web:ef0c77dca759172610da51"
-};
+      apiKey: "AIzaSyCo4bRcTLb1_-eXeOhdtXQEZ90sQmUZw90",
+      authDomain: "ggez-5302e.firebaseapp.com",
+      projectId: "ggez-5302e",
+      storageBucket: "ggez-5302e.firebasestorage.app",
+      messagingSenderId: "650058792708",
+      appId: "1:650058792708:web:ef0c77dca759172610da51"
     };
 
-    // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ===== PARTÍCULAS CSS (generación dinámica) =====
+    // ===== PARTÍCULAS =====
     (function crearParticulas() {
       const contenedor = document.getElementById('particulas');
-      const cantidad = 30;
-
-      for (let i = 0; i < cantidad; i++) {
-        const particula = document.createElement('div');
-        particula.classList.add('particula');
-        particula.style.left = Math.random() * 100 + '%';
-        particula.style.animationDuration = (Math.random() * 8 + 6) + 's';
-        particula.style.animationDelay = (Math.random() * 10) + 's';
-        particula.style.width = (Math.random() * 4 + 2) + 'px';
-        particula.style.height = particula.style.width;
-        contenedor.appendChild(particula);
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.classList.add('particula');
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        p.style.width = (Math.random() * 4 + 2) + 'px';
+        p.style.height = p.style.width;
+        contenedor.appendChild(p);
       }
     })();
 
-    // ===== NAVBAR SCROLL Y BLUR =====
+    // ===== NAVBAR =====
     const navbar = document.getElementById('navbar');
-
     window.addEventListener('scroll', function () {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
 
     // ===== MENÚ HAMBURGUESA =====
     const hamburguesa = document.getElementById('hamburguesa');
     const navMenu = document.getElementById('navMenu');
-
     hamburguesa.addEventListener('click', function () {
       hamburguesa.classList.toggle('activo');
       navMenu.classList.toggle('activo');
     });
-
-    // Cerrar menú al hacer clic en un enlace
     navMenu.querySelectorAll('a').forEach(function (enlace) {
       enlace.addEventListener('click', function () {
         hamburguesa.classList.remove('activo');
@@ -1172,49 +1020,36 @@
       });
     });
 
-    // ===== ESTRELLAS DEL FORMULARIO =====
+    // ===== ESTRELLAS =====
     const estrellasBtns = document.querySelectorAll('.estrella-btn');
     const estrellasValor = document.getElementById('estrellasValor');
     let estrellasSeleccionadas = 0;
-
     estrellasBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         estrellasSeleccionadas = parseInt(btn.dataset.valor);
         estrellasValor.value = estrellasSeleccionadas;
-
-        estrellasBtns.forEach(function (b, index) {
-          if (index < estrellasSeleccionadas) {
-            b.classList.add('seleccionada');
-          } else {
-            b.classList.remove('seleccionada');
-          }
+        estrellasBtns.forEach(function (b, i) {
+          b.classList.toggle('seleccionada', i < estrellasSeleccionadas);
         });
       });
     });
 
-    // ===== ENVIAR TESTIMONIO A FIRESTORE =====
+    // ===== ENVIAR TESTIMONIO =====
     const formTestimonio = document.getElementById('formTestimonio');
     const mensajeExito = document.getElementById('mensajeExito');
     const mensajeError = document.getElementById('mensajeError');
-
     formTestimonio.addEventListener('submit', function (e) {
       e.preventDefault();
-
       mensajeExito.classList.remove('visible');
       mensajeError.classList.remove('visible');
-
       const nombre = document.getElementById('nombre').value.trim();
       const testimonio = document.getElementById('testimonio').value.trim();
       const estrellas = parseInt(estrellasValor.value);
-
-      // Validación de campos obligatorios
       if (!nombre || !testimonio || !estrellas || estrellas < 1 || estrellas > 5) {
         mensajeError.textContent = 'Por favor completa todos los campos, incluyendo la calificación.';
         mensajeError.classList.add('visible');
         return;
       }
-
-      // Guardar en Firestore
       db.collection('testimonios').add({
         nombre: nombre,
         testimonio: testimonio,
@@ -1225,9 +1060,7 @@
         mensajeExito.classList.add('visible');
         formTestimonio.reset();
         estrellasSeleccionadas = 0;
-        estrellasBtns.forEach(function (b) {
-          b.classList.remove('seleccionada');
-        });
+        estrellasBtns.forEach(function (b) { b.classList.remove('seleccionada'); });
         estrellasValor.value = '';
       })
       .catch(function (error) {
@@ -1237,49 +1070,35 @@
       });
     });
 
-    // ===== CARGAR TESTIMONIOS EN TIEMPO REAL =====
+    // ===== CARGAR TESTIMONIOS =====
     const testimoniosGrid = document.getElementById('testimoniosGrid');
     const sinTestimonios = document.getElementById('sinTestimonios');
-
-    db.collection('testimonios')
-      .orderBy('fecha', 'desc')
-      .onSnapshot(function (snapshot) {
-        // Limpiar tarjetas anteriores (excepto mensaje vacío)
-        testimoniosGrid.querySelectorAll('.testimonio-card').forEach(function (card) {
-          card.remove();
-        });
-
-        if (snapshot.empty) {
-          sinTestimonios.style.display = 'block';
-          return;
-        }
-
-        sinTestimonios.style.display = 'none';
-
-        snapshot.forEach(function (doc) {
-          const data = doc.data();
-          const estrellasHtml = '⭐'.repeat(data.estrellas);
-
-          const card = document.createElement('div');
-          card.classList.add('testimonio-card');
-          card.innerHTML =
-            '<p class="testimonio-texto">"' + escapeHtml(data.testimonio) + '"</p>' +
-            '<p class="testimonio-nombre">— ' + escapeHtml(data.nombre) + '</p>' +
-            '<p class="testimonio-estrellas">' + estrellasHtml + '</p>';
-
-          testimoniosGrid.appendChild(card);
-        });
-      }, function (error) {
-        console.error('Error al cargar testimonios:', error);
-      });
-
-    // Escapar HTML para prevenir XSS
     function escapeHtml(texto) {
       const div = document.createElement('div');
       div.textContent = texto;
       return div.innerHTML;
     }
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore-compat.js"></script>
+    db.collection('testimonios').orderBy('fecha', 'desc').onSnapshot(function (snapshot) {
+      testimoniosGrid.querySelectorAll('.testimonio-card').forEach(function (c) { c.remove(); });
+      if (snapshot.empty) {
+        sinTestimonios.style.display = 'block';
+        return;
+      }
+      sinTestimonios.style.display = 'none';
+      snapshot.forEach(function (doc) {
+        const data = doc.data();
+        const card = document.createElement('div');
+        card.classList.add('testimonio-card');
+        card.innerHTML =
+          '<p class="testimonio-texto">"' + escapeHtml(data.testimonio) + '"</p>' +
+          '<p class="testimonio-nombre">— ' + escapeHtml(data.nombre) + '</p>' +
+          '<p class="testimonio-estrellas">' + '⭐'.repeat(data.estrellas) + '</p>';
+        testimoniosGrid.appendChild(card);
+      });
+    }, function (error) {
+      console.error('Error al cargar testimonios:', error);
+    });
+  </script>
+
 </body>
 </html>
